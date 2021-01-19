@@ -1,0 +1,13 @@
+C:\Users\Michael\source\repos\TestNetworkServer\TestNetworkServer\bin\Debug\netcoreapp3.1\TestNetworkServer.exe
+C:\Users\Michael\source\repos\TestNetworkServer\TestNetworkServer\bin\Debug\netcoreapp3.1\TestNetworkServer.deps.json
+C:\Users\Michael\source\repos\TestNetworkServer\TestNetworkServer\bin\Debug\netcoreapp3.1\TestNetworkServer.runtimeconfig.json
+C:\Users\Michael\source\repos\TestNetworkServer\TestNetworkServer\bin\Debug\netcoreapp3.1\TestNetworkServer.runtimeconfig.dev.json
+C:\Users\Michael\source\repos\TestNetworkServer\TestNetworkServer\bin\Debug\netcoreapp3.1\TestNetworkServer.dll
+C:\Users\Michael\source\repos\TestNetworkServer\TestNetworkServer\bin\Debug\netcoreapp3.1\TestNetworkServer.pdb
+C:\Users\Michael\source\repos\TestNetworkServer\TestNetworkServer\obj\Debug\netcoreapp3.1\TestNetworkServer.csprojAssemblyReference.cache
+C:\Users\Michael\source\repos\TestNetworkServer\TestNetworkServer\obj\Debug\netcoreapp3.1\TestNetworkServer.AssemblyInfoInputs.cache
+C:\Users\Michael\source\repos\TestNetworkServer\TestNetworkServer\obj\Debug\netcoreapp3.1\TestNetworkServer.AssemblyInfo.cs
+C:\Users\Michael\source\repos\TestNetworkServer\TestNetworkServer\obj\Debug\netcoreapp3.1\TestNetworkServer.csproj.CoreCompileInputs.cache
+C:\Users\Michael\source\repos\TestNetworkServer\TestNetworkServer\obj\Debug\netcoreapp3.1\TestNetworkServer.dll
+C:\Users\Michael\source\repos\TestNetworkServer\TestNetworkServer\obj\Debug\netcoreapp3.1\TestNetworkServer.pdb
+C:\Users\Michael\source\repos\TestNetworkServer\TestNetworkServer\obj\Debug\netcoreapp3.1\TestNetworkServer.genruntimeconfig.cache
