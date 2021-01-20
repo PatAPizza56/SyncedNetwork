@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace SyncNetworking.Client
+namespace SyncedNetwork.Client
 {
     public class Client
     {

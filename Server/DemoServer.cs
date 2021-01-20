@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using SyncNetworking.Server;
+using SyncedNetwork.Server;
 
 class DemoServer
 {

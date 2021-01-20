@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Michael\\Documents\\SyncNetworking\\Server\\Server.csproj": {}
+    "C:\\Users\\Michael\\Documents\\Projects\\SyncedStudios\\SyncedNetwork\\Server\\Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Michael\\Documents\\SyncNetworking\\ByteBuffer\\ByteBuffer.csproj": {
+    "C:\\Users\\Michael\\Documents\\Projects\\SyncedStudios\\SyncedNetwork\\ByteBuffer\\ByteBuffer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Michael\\Documents\\SyncNetworking\\ByteBuffer\\ByteBuffer.csproj",
+        "projectUniqueName": "C:\\Users\\Michael\\Documents\\Projects\\SyncedStudios\\SyncedNetwork\\ByteBuffer\\ByteBuffer.csproj",
         "projectName": "ByteBuffer",
-        "projectPath": "C:\\Users\\Michael\\Documents\\SyncNetworking\\ByteBuffer\\ByteBuffer.csproj",
+        "projectPath": "C:\\Users\\Michael\\Documents\\Projects\\SyncedStudios\\SyncedNetwork\\ByteBuffer\\ByteBuffer.csproj",
         "packagesPath": "C:\\Users\\Michael\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Michael\\Documents\\SyncNetworking\\ByteBuffer\\obj\\",
+        "outputPath": "C:\\Users\\Michael\\Documents\\Projects\\SyncedStudios\\SyncedNetwork\\ByteBuffer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"
@@ -65,14 +65,14 @@
         }
       }
     },
-    "C:\\Users\\Michael\\Documents\\SyncNetworking\\Server\\Server.csproj": {
+    "C:\\Users\\Michael\\Documents\\Projects\\SyncedStudios\\SyncedNetwork\\Server\\Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Michael\\Documents\\SyncNetworking\\Server\\Server.csproj",
+        "projectUniqueName": "C:\\Users\\Michael\\Documents\\Projects\\SyncedStudios\\SyncedNetwork\\Server\\Server.csproj",
         "projectName": "Server",
-        "projectPath": "C:\\Users\\Michael\\Documents\\SyncNetworking\\Server\\Server.csproj",
+        "projectPath": "C:\\Users\\Michael\\Documents\\Projects\\SyncedStudios\\SyncedNetwork\\Server\\Server.csproj",
         "packagesPath": "C:\\Users\\Michael\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Michael\\Documents\\SyncNetworking\\Server\\obj\\",
+        "outputPath": "C:\\Users\\Michael\\Documents\\Projects\\SyncedStudios\\SyncedNetwork\\Server\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"
@@ -93,8 +93,8 @@
           "netcoreapp2.0": {
             "targetAlias": "netcoreapp2.0",
             "projectReferences": {
-              "C:\\Users\\Michael\\Documents\\SyncNetworking\\ByteBuffer\\ByteBuffer.csproj": {
-                "projectPath": "C:\\Users\\Michael\\Documents\\SyncNetworking\\ByteBuffer\\ByteBuffer.csproj"
+              "C:\\Users\\Michael\\Documents\\Projects\\SyncedStudios\\SyncedNetwork\\ByteBuffer\\ByteBuffer.csproj": {
+                "projectPath": "C:\\Users\\Michael\\Documents\\Projects\\SyncedStudios\\SyncedNetwork\\ByteBuffer\\ByteBuffer.csproj"
               }
             }
           }

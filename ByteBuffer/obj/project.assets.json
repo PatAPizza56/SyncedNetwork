@@ -186,11 +186,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Michael\\Documents\\SyncNetworking\\ByteBuffer\\ByteBuffer.csproj",
+      "projectUniqueName": "C:\\Users\\Michael\\Documents\\Projects\\SyncedStudios\\SyncedNetwork\\ByteBuffer\\ByteBuffer.csproj",
       "projectName": "ByteBuffer",
-      "projectPath": "C:\\Users\\Michael\\Documents\\SyncNetworking\\ByteBuffer\\ByteBuffer.csproj",
+      "projectPath": "C:\\Users\\Michael\\Documents\\Projects\\SyncedStudios\\SyncedNetwork\\ByteBuffer\\ByteBuffer.csproj",
       "packagesPath": "C:\\Users\\Michael\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Michael\\Documents\\SyncNetworking\\ByteBuffer\\obj\\",
+      "outputPath": "C:\\Users\\Michael\\Documents\\Projects\\SyncedStudios\\SyncedNetwork\\ByteBuffer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\"

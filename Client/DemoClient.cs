@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using SyncNetworking.Client;
+using SyncedNetwork.Client;
 
 class DemoClient
 {

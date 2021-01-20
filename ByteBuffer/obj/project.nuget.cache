@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2OCf+qDYbmZN33plcVbJWGQO01cPpOOZBpoRjnexJqbRE6skccOVdLcIZmFjryW26BMq5iPLrg/pOPoPwAD1zg==",
+  "dgSpecHash": "g/za2UWNrPUruLAQy1D/tmabCFFqAlCbp05kOhqCeMK133mNld067eFYGZFn89n4eAdJ8+gcUMyAfdzHVwmHHg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Michael\\Documents\\SyncNetworking\\ByteBuffer\\ByteBuffer.csproj",
+  "projectFilePath": "C:\\Users\\Michael\\Documents\\Projects\\SyncedStudios\\SyncedNetwork\\ByteBuffer\\ByteBuffer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Michael\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\Michael\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"

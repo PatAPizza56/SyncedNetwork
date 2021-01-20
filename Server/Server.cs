@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace SyncNetworking.Server
+namespace SyncedNetwork.Server
 {
     public class Server
     {

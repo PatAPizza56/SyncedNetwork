@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xJnqn9Dr+TU+qQQ2uVuHvTqNIjTBR1kImdn9GhhRFw62BeJmMEXzJXz+XeHCY2maSv4mHDCKGdc7e+MkoE5lmA==",
+  "dgSpecHash": "h88XeDi7OK+JNg/N4IJ3zoy3enCBDZ4L0brIWfNdU22Ze6mmdBcF4KeePaAWUNrRT0zwupatmJORmNW3iebQuw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Michael\\Documents\\SyncNetworking\\Server\\Server.csproj",
+  "projectFilePath": "C:\\Users\\Michael\\Documents\\Projects\\SyncedStudios\\SyncedNetwork\\Server\\Server.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Michael\\.nuget\\packages\\microsoft.netcore.app\\2.0.0\\microsoft.netcore.app.2.0.0.nupkg.sha512",
     "C:\\Users\\Michael\\.nuget\\packages\\microsoft.netcore.dotnetapphost\\2.0.0\\microsoft.netcore.dotnetapphost.2.0.0.nupkg.sha512",
