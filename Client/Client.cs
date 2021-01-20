@@ -13,28 +13,46 @@ namespace SyncNetworking.Client
         ClientTCP TCP;
 
         Dictionary<int, Message> messages;
-        RecieveMessageCallback onRecieveMessage;
-        public delegate void RecieveMessageCallback(int packetID, Message message);
 
-        public void ConnectToServer(string IP, int port)
+        public delegate void RecieveMessageCallback(int packetID, Message message);
+        public delegate void ConnectedToServerCallback(string message);
+        public delegate void DisconnectedFromServerCallback(string message);
+
+        public void ConnectToServer(string IP, int port, Dictionary<int, Message> messages, RecieveMessageCallback onRecieveMessage)
         {
-            // MORE CALLBACKS!!
-            // On sendmessage success, on sendmessagefailed
-            // on connect success, on connect failed
+            this.messages = messages;
 
             threadConsole = new Thread(new ThreadStart(ConsoleThread));
             threadConsole.Start();
 
-            handle = new ClientHandle();
-            handle.SetMessages(messages, onRecieveMessage);
+            handle = new ClientHandle(messages, onRecieveMessage);
 
             TCP = new ClientTCP(handle);
             TCP.ConnectToServer(IP, port);
         }
-
-        public void SetMessages(Dictionary<int, Message> messages)
+        public void ConnectToServer(string IP, int port, Dictionary<int, Message> messages, RecieveMessageCallback onRecieveMessage, ConnectedToServerCallback onConnectToServerSuccess, ConnectedToServerCallback onConnectToServerFailed)
         {
             this.messages = messages;
+
+            threadConsole = new Thread(new ThreadStart(ConsoleThread));
+            threadConsole.Start();
+
+            handle = new ClientHandle(messages, onRecieveMessage);
+
+            TCP = new ClientTCP(handle, onConnectToServerSuccess, onConnectToServerFailed);
+            TCP.ConnectToServer(IP, port);
+        }
+        public void ConnectToServer(string IP, int port, Dictionary<int, Message> messages, RecieveMessageCallback onRecieveMessage, ConnectedToServerCallback onConnectToServerSuccess, ConnectedToServerCallback onConnectToServerFailed, DisconnectedFromServerCallback onDisconnectedFromServer)
+        {
+            this.messages = messages;
+
+            threadConsole = new Thread(new ThreadStart(ConsoleThread));
+            threadConsole.Start();
+
+            handle = new ClientHandle(messages, onRecieveMessage);
+
+            TCP = new ClientTCP(handle, onConnectToServerSuccess, onConnectToServerFailed, onDisconnectedFromServer);
+            TCP.ConnectToServer(IP, port);
         }
 
         public void SendMessage(int packetID)
@@ -89,14 +107,9 @@ namespace SyncNetworking.Client
             buffer.Dispose();
         }
 
-        public void OnRecieveMessage(RecieveMessageCallback onRecieveMessage)
-        {
-            this.onRecieveMessage = onRecieveMessage;
-        }
-
         public void DisconnectFromServer()
         {
-
+            TCP.DisconnectFromServer();
         }
 
         void ConsoleThread() { while (true) { } }
@@ -104,7 +117,11 @@ namespace SyncNetworking.Client
 
     public class ClientTCP
     {
-        public ClientHandle handle;
+        ClientHandle handle;
+
+        Client.ConnectedToServerCallback onConnectToServerSuccess;
+        Client.ConnectedToServerCallback onConnectToServerFailed;
+        Client.DisconnectedFromServerCallback onDisconnectedFromServer;
 
         TcpClient socket;
         NetworkStream stream;
@@ -116,6 +133,19 @@ namespace SyncNetworking.Client
         public ClientTCP(ClientHandle handle)
         {
             this.handle = handle;
+        }
+        public ClientTCP(ClientHandle handle, Client.ConnectedToServerCallback onConnectToServerSuccess, Client.ConnectedToServerCallback onConnectToServerFailed)
+        {
+            this.handle = handle;
+            this.onConnectToServerSuccess = onConnectToServerSuccess;
+            this.onConnectToServerFailed = onConnectToServerFailed;
+        }
+        public ClientTCP(ClientHandle handle, Client.ConnectedToServerCallback onConnectToServerSuccess, Client.ConnectedToServerCallback onConnectToServerFailed, Client.DisconnectedFromServerCallback onDisconnectedFromServer)
+        {
+            this.handle = handle;
+            this.onConnectToServerSuccess = onConnectToServerSuccess;
+            this.onConnectToServerFailed = onConnectToServerFailed;
+            this.onDisconnectedFromServer = onDisconnectedFromServer;
         }
 
         public void ConnectToServer(string IP, int port, int bufferSize = 4096)
@@ -131,8 +161,6 @@ namespace SyncNetworking.Client
             socket.BeginConnect(IP, port, new AsyncCallback(OnConnectedToServer), socket);
         }
 
-        #region "Callbacks"
-
         void OnConnectedToServer(IAsyncResult result)
         {
             try
@@ -141,13 +169,13 @@ namespace SyncNetworking.Client
 
                 if (socket.Connected == false)
                 {
-                    OnConnectToServerFailed();
+                    if (onConnectToServerFailed != null) { onConnectToServerFailed("Failed to connect to server"); }
 
                     return;
                 }
                 else
                 {
-                    OnConnectToServerSuccess();
+                    if (onConnectToServerSuccess != null) { onConnectToServerSuccess("Succesfully connected to server"); }
 
                     stream = socket.GetStream();
                     stream.BeginRead(asyncBuffer, 0, asyncBufferSize, OnRecieveData, null);
@@ -155,20 +183,22 @@ namespace SyncNetworking.Client
             }
             catch (Exception exception)
             {
-                OnConnectToServerFailed(exception);
+                if (onConnectToServerFailed != null) { onConnectToServerFailed($"Failed to connect to server, error: {exception}"); }
             }
         }
-        void OnConnectToServerSuccess()
+
+        public void SendMessage(byte[] data)
         {
-            Console.WriteLine("Succesfully connected to server");
-        }
-        void OnConnectToServerFailed()
-        {
-            Console.WriteLine("Failed to connect to server");
-        }
-        void OnConnectToServerFailed(Exception exception)
-        {
-            Console.WriteLine($"Failed to connect to server, error: {exception}");
+            ByteBuffer buffer = new ByteBuffer();
+
+            buffer.Write((data.GetUpperBound(0) - data.GetLowerBound(0) + 1));
+            buffer.Write(data);
+
+            while (stream == null) {  }
+
+            stream.Write(buffer.ToArray(), 0, buffer.ToArray().Length);
+
+            buffer.Dispose();
         }
 
         void OnRecieveData(IAsyncResult result)
@@ -182,7 +212,7 @@ namespace SyncNetworking.Client
 
                 if (byteLength == 0)
                 {
-                    OnDisconnectFromServer();
+                    if (onDisconnectedFromServer != null) { onDisconnectedFromServer("Disconnected from server"); }
 
                     return;
                 }
@@ -191,52 +221,29 @@ namespace SyncNetworking.Client
 
                 stream.BeginRead(asyncBuffer, 0, asyncBufferSize, OnRecieveData, null);
             }
-            catch (Exception e)
+            catch
             {
-                Console.WriteLine(e);
-
-                OnRecieveDataFailed();
+                if (onDisconnectedFromServer != null) { onDisconnectedFromServer("Disconnected from server"); }
             }
         }
 
-        void OnRecieveDataFailed()
+        public void DisconnectFromServer()
         {
-            Console.WriteLine("Failed to recieve data");
-        }
-
-        void OnDisconnectFromServer()
-        {
-            Console.WriteLine("Disconnected from server");
-        }
-
-        #endregion
-
-        public void SendMessage(byte[] data)
-        {
-            ByteBuffer buffer = new ByteBuffer();
-
-            buffer.Write((data.GetUpperBound(0) - data.GetLowerBound(0) + 1));
-            buffer.Write(data);
-
-            //Figure out this error: Object reference not set to an instance of an object (stream was null)
-            stream.Write(buffer.ToArray(), 0, buffer.ToArray().Length);
-
-            buffer.Dispose();
+            socket.Close();
+            socket = null;
         }
     }
 
     public class ClientHandle
     {
         ByteBuffer buffer;
-        
         int packetLength;
+
         Dictionary<int, Message> messages;
         Client.RecieveMessageCallback onRecieveMessage;
         
-        public void SetMessages(Dictionary<int, Message> messages, Client.RecieveMessageCallback onRecieveMessage)
+        public ClientHandle(Dictionary<int, Message> messages, Client.RecieveMessageCallback onRecieveMessage)
         {
-            Console.WriteLine("Setting messages");
-
             this.messages = messages;
             this.onRecieveMessage = onRecieveMessage;
         }
@@ -279,7 +286,7 @@ namespace SyncNetworking.Client
                     this.buffer.ReadInt();
                     data = this.buffer.ReadBytes(packetLength);
 
-                    HandleDataMessages(data);
+                    HandleMessage(data);
                 }
 
                 packetLength = 0;
@@ -298,7 +305,7 @@ namespace SyncNetworking.Client
             }
         }
 
-        void HandleDataMessages(byte[] data)
+        void HandleMessage(byte[] data)
         {
             int packetID;
             Message message;

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Michael\\source\\repos\\SyncNetworking\\Client\\Client.csproj": {}
+    "C:\\Users\\Michael\\Documents\\SyncNetworking\\Client\\Client.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Michael\\source\\repos\\SyncNetworking\\ByteBuffer\\ByteBuffer.csproj": {
+    "C:\\Users\\Michael\\Documents\\SyncNetworking\\ByteBuffer\\ByteBuffer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Michael\\source\\repos\\SyncNetworking\\ByteBuffer\\ByteBuffer.csproj",
+        "projectUniqueName": "C:\\Users\\Michael\\Documents\\SyncNetworking\\ByteBuffer\\ByteBuffer.csproj",
         "projectName": "ByteBuffer",
-        "projectPath": "C:\\Users\\Michael\\source\\repos\\SyncNetworking\\ByteBuffer\\ByteBuffer.csproj",
+        "projectPath": "C:\\Users\\Michael\\Documents\\SyncNetworking\\ByteBuffer\\ByteBuffer.csproj",
         "packagesPath": "C:\\Users\\Michael\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Michael\\source\\repos\\SyncNetworking\\ByteBuffer\\obj\\",
+        "outputPath": "C:\\Users\\Michael\\Documents\\SyncNetworking\\ByteBuffer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"
@@ -65,14 +65,14 @@
         }
       }
     },
-    "C:\\Users\\Michael\\source\\repos\\SyncNetworking\\Client\\Client.csproj": {
+    "C:\\Users\\Michael\\Documents\\SyncNetworking\\Client\\Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Michael\\source\\repos\\SyncNetworking\\Client\\Client.csproj",
+        "projectUniqueName": "C:\\Users\\Michael\\Documents\\SyncNetworking\\Client\\Client.csproj",
         "projectName": "Client",
-        "projectPath": "C:\\Users\\Michael\\source\\repos\\SyncNetworking\\Client\\Client.csproj",
+        "projectPath": "C:\\Users\\Michael\\Documents\\SyncNetworking\\Client\\Client.csproj",
         "packagesPath": "C:\\Users\\Michael\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Michael\\source\\repos\\SyncNetworking\\Client\\obj\\",
+        "outputPath": "C:\\Users\\Michael\\Documents\\SyncNetworking\\Client\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"
@@ -93,8 +93,8 @@
           "netcoreapp2.0": {
             "targetAlias": "netcoreapp2.0",
             "projectReferences": {
-              "C:\\Users\\Michael\\source\\repos\\SyncNetworking\\ByteBuffer\\ByteBuffer.csproj": {
-                "projectPath": "C:\\Users\\Michael\\source\\repos\\SyncNetworking\\ByteBuffer\\ByteBuffer.csproj"
+              "C:\\Users\\Michael\\Documents\\SyncNetworking\\ByteBuffer\\ByteBuffer.csproj": {
+                "projectPath": "C:\\Users\\Michael\\Documents\\SyncNetworking\\ByteBuffer\\ByteBuffer.csproj"
               }
             }
           }
