@@ -7,25 +7,33 @@ namespace SyncedNetwork.Server
     {
         public int ID;
         public string IP;
+        public bool IsActive;
         public TcpClient socket;
         public NetworkStream stream;
         public ByteBuffer buffer;
 
         ServerHandle handle;
+        ServerTCP tcp;
         Server.OnClientDisconnect onClientDisconnect;
 
         int bufferSize = 4096;
         byte[] readBuffer;
 
-        public ServerClient(ServerHandle handle)
+        public ServerClient(ServerHandle handle, ServerTCP tcp)
         {
             this.handle = handle;
+            this.tcp = tcp;
             this.onClientDisconnect = null;
+
+            this.IsActive = false;
         }
-        public ServerClient(ServerHandle handle, Server.OnClientDisconnect onClientDisconnect)
+        public ServerClient(ServerHandle handle, ServerTCP tcp, Server.OnClientDisconnect onClientDisconnect)
         {
             this.handle = handle;
+            this.tcp = tcp;
             this.onClientDisconnect = onClientDisconnect;
+
+            this.IsActive = false;
         }
 
         public void InitializeClient()
@@ -37,6 +45,8 @@ namespace SyncedNetwork.Server
 
             stream = socket.GetStream();
             stream.BeginRead(readBuffer, 0, bufferSize, OnRecieveData, null);
+
+            IsActive = true;
         }
 
         void OnRecieveData(IAsyncResult result)
@@ -70,6 +80,8 @@ namespace SyncedNetwork.Server
         {
             if (onClientDisconnect != null) { onClientDisconnect(ID); }
 
+            IsActive = false;
+
             socket.Close();
             socket = null;
 
@@ -77,6 +89,8 @@ namespace SyncedNetwork.Server
             buffer = null;
 
             onClientDisconnect = null;
+
+            tcp.UpdateServerClients();
         }
     }
 }

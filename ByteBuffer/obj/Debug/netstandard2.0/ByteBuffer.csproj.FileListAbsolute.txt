@@ -7,3 +7,12 @@ C:\Users\Michael\source\repos\SyncNetworking\ByteBuffer\obj\Debug\netstandard2.0
 C:\Users\Michael\source\repos\SyncNetworking\ByteBuffer\obj\Debug\netstandard2.0\ByteBuffer.csproj.CoreCompileInputs.cache
 C:\Users\Michael\source\repos\SyncNetworking\ByteBuffer\obj\Debug\netstandard2.0\ByteBuffer.dll
 C:\Users\Michael\source\repos\SyncNetworking\ByteBuffer\obj\Debug\netstandard2.0\ByteBuffer.pdb
+C:\Users\Michael\Documents\Projects\SyncedStudios\SyncedNetwork\ByteBuffer\bin\Debug\netstandard2.0\ByteBuffer.deps.json
+C:\Users\Michael\Documents\Projects\SyncedStudios\SyncedNetwork\ByteBuffer\bin\Debug\netstandard2.0\ByteBuffer.dll
+C:\Users\Michael\Documents\Projects\SyncedStudios\SyncedNetwork\ByteBuffer\bin\Debug\netstandard2.0\ByteBuffer.pdb
+C:\Users\Michael\Documents\Projects\SyncedStudios\SyncedNetwork\ByteBuffer\obj\Debug\netstandard2.0\ByteBuffer.csprojAssemblyReference.cache
+C:\Users\Michael\Documents\Projects\SyncedStudios\SyncedNetwork\ByteBuffer\obj\Debug\netstandard2.0\ByteBuffer.AssemblyInfoInputs.cache
+C:\Users\Michael\Documents\Projects\SyncedStudios\SyncedNetwork\ByteBuffer\obj\Debug\netstandard2.0\ByteBuffer.AssemblyInfo.cs
+C:\Users\Michael\Documents\Projects\SyncedStudios\SyncedNetwork\ByteBuffer\obj\Debug\netstandard2.0\ByteBuffer.csproj.CoreCompileInputs.cache
+C:\Users\Michael\Documents\Projects\SyncedStudios\SyncedNetwork\ByteBuffer\obj\Debug\netstandard2.0\ByteBuffer.dll
+C:\Users\Michael\Documents\Projects\SyncedStudios\SyncedNetwork\ByteBuffer\obj\Debug\netstandard2.0\ByteBuffer.pdb

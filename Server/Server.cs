@@ -15,6 +15,8 @@ namespace SyncedNetwork.Server
 
         Dictionary<int, Message> messages;
 
+        public ServerClient[] Clients;
+
         public delegate void RecieveMessageCallback(int clientID, int packetID, Message message);
         public delegate void OnClientConnect(int clientID);
         public delegate void OnClientDisconnect(int clientID);
@@ -28,13 +30,15 @@ namespace SyncedNetwork.Server
                 threadConsole = new Thread(new ThreadStart(ConsoleThread));
                 threadConsole.Start();
 
-                TCP = new ServerTCP(port, maxPlayers);
+                TCP = new ServerTCP(this, port, maxPlayers);
                 handle = new ServerHandle(TCP, messages, onRecieveMessage);
 
                 for (int i = 0; i < TCP.maxPlayers; i++)
                 {
-                    TCP.clients[i] = new ServerClient(handle);
+                    TCP.clients[i] = new ServerClient(handle, TCP);
                 }
+
+                Clients = TCP.clients;
 
                 TCP.StartServer();
             }
@@ -52,13 +56,15 @@ namespace SyncedNetwork.Server
                 threadConsole = new Thread(new ThreadStart(ConsoleThread));
                 threadConsole.Start();
 
-                TCP = new ServerTCP(port, maxPlayers, onClientConnect);
+                TCP = new ServerTCP(this, port, maxPlayers, onClientConnect);
                 handle = new ServerHandle(TCP, messages, onRecieveMessage);
 
                 for (int i = 0; i < TCP.maxPlayers; i++)
                 {
-                    TCP.clients[i] = new ServerClient(handle);
+                    TCP.clients[i] = new ServerClient(handle, TCP);
                 }
+
+                Clients = TCP.clients;
 
                 TCP.StartServer();
             }
@@ -76,13 +82,15 @@ namespace SyncedNetwork.Server
                 threadConsole = new Thread(new ThreadStart(ConsoleThread));
                 threadConsole.Start();
 
-                TCP = new ServerTCP(port, maxPlayers, onClientConnect);
+                TCP = new ServerTCP(this, port, maxPlayers, onClientConnect);
                 handle = new ServerHandle(TCP, messages, onRecieveMessage);
 
                 for (int i = 0; i < TCP.maxPlayers; i++)
                 {
-                    TCP.clients[i] = new ServerClient(handle, onClientDisconnect);
+                    TCP.clients[i] = new ServerClient(handle, TCP, onClientDisconnect);
                 }
+
+                Clients = TCP.clients;
 
                 TCP.StartServer();
             }
@@ -159,20 +167,25 @@ namespace SyncedNetwork.Server
         public int maxPlayers;
         public ServerClient[] clients;
 
+        Server server;
         Server.OnClientConnect onClientConnect;
 
         int port;
         TcpListener serverSocket;
 
-        public ServerTCP(int port, int maxPlayers)
+        public ServerTCP(Server server, int port, int maxPlayers)
         {
+            this.server = server;
+
             this.port = port;
 
             this.maxPlayers = maxPlayers;
             this.clients = new ServerClient[this.maxPlayers];
         }
-        public ServerTCP(int port, int maxPlayers, Server.OnClientConnect onClientConnect)
+        public ServerTCP(Server server, int port, int maxPlayers, Server.OnClientConnect onClientConnect)
         {
+            this.server = server;
+
             this.port = port;
 
             this.maxPlayers = maxPlayers;
@@ -222,6 +235,11 @@ namespace SyncedNetwork.Server
             buffer.Write(data);
 
             clients[clientID].stream.BeginWrite(buffer.ToArray(), 0, buffer.Count(), null, null);
+        }
+
+        public void UpdateServerClients()
+        {
+            server.Clients = clients;
         }
     }
 
