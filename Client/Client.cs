@@ -20,96 +20,131 @@ namespace SyncedNetwork.Client
 
         public void ConnectToServer(string IP, int port, Dictionary<int, Message> messages, RecieveMessageCallback onRecieveMessage)
         {
-            this.messages = messages;
+            try
+            {
+                this.messages = messages;
 
-            threadConsole = new Thread(new ThreadStart(ConsoleThread));
-            threadConsole.Start();
+                threadConsole = new Thread(new ThreadStart(ConsoleThread));
+                threadConsole.Start();
 
-            handle = new ClientHandle(messages, onRecieveMessage);
+                handle = new ClientHandle(messages, onRecieveMessage);
 
-            TCP = new ClientTCP(handle);
-            TCP.ConnectToServer(IP, port);
+                TCP = new ClientTCP(handle);
+                TCP.ConnectToServer(IP, port);
+            }
+            catch (Exception reason)
+            {
+                throw new Exception($"Failed to connect to server, reason: {reason}");
+            }
         }
         public void ConnectToServer(string IP, int port, Dictionary<int, Message> messages, RecieveMessageCallback onRecieveMessage, ConnectedToServerCallback onConnectToServerSuccess, ConnectedToServerCallback onConnectToServerFailed)
         {
-            this.messages = messages;
+            try
+            {
+                this.messages = messages;
 
-            threadConsole = new Thread(new ThreadStart(ConsoleThread));
-            threadConsole.Start();
+                threadConsole = new Thread(new ThreadStart(ConsoleThread));
+                threadConsole.Start();
 
-            handle = new ClientHandle(messages, onRecieveMessage);
+                handle = new ClientHandle(messages, onRecieveMessage);
 
-            TCP = new ClientTCP(handle, onConnectToServerSuccess, onConnectToServerFailed);
-            TCP.ConnectToServer(IP, port);
+                TCP = new ClientTCP(handle, onConnectToServerSuccess, onConnectToServerFailed);
+                TCP.ConnectToServer(IP, port);
+            }
+            catch (Exception reason)
+            {
+                throw new Exception($"Failed to connect to server, reason: {reason}");
+            }
         }
         public void ConnectToServer(string IP, int port, Dictionary<int, Message> messages, RecieveMessageCallback onRecieveMessage, ConnectedToServerCallback onConnectToServerSuccess, ConnectedToServerCallback onConnectToServerFailed, DisconnectedFromServerCallback onDisconnectedFromServer)
         {
-            this.messages = messages;
+            try
+            {
+                this.messages = messages;
 
-            threadConsole = new Thread(new ThreadStart(ConsoleThread));
-            threadConsole.Start();
+                threadConsole = new Thread(new ThreadStart(ConsoleThread));
+                threadConsole.Start();
 
-            handle = new ClientHandle(messages, onRecieveMessage);
+                handle = new ClientHandle(messages, onRecieveMessage);
 
-            TCP = new ClientTCP(handle, onConnectToServerSuccess, onConnectToServerFailed, onDisconnectedFromServer);
-            TCP.ConnectToServer(IP, port);
+                TCP = new ClientTCP(handle, onConnectToServerSuccess, onConnectToServerFailed, onDisconnectedFromServer);
+                TCP.ConnectToServer(IP, port);
+            }
+            catch (Exception reason)
+            {
+                throw new Exception($"Failed to connect to server, reason: {reason}");
+            }
         }
 
         public void SendMessage(int packetID)
         {
-            ByteBuffer buffer = new ByteBuffer();
-
-            buffer.Write(packetID);
-
-            Message message;
-
-            if (messages.TryGetValue(packetID, out message)) { }
-            else { return; }
-
-            if (message.Integers != null)
+            try
             {
-                for (int i = 0; i < message.Integers.Length; i++)
-                {
-                    buffer.Write(message.Integers[i]);
-                }
-            }
-            if (message.Floats != null)
-            {
-                for (int i = 0; i < message.Floats.Length; i++)
-                {
-                    buffer.Write(message.Floats[i]);
-                }
-            }
-            if (message.Shorts != null)
-            {
-                for (int i = 0; i < message.Shorts.Length; i++)
-                {
-                    buffer.Write(message.Shorts[i]);
-                }
-            }
-            if (message.Longs != null)
-            {
-                for (int i = 0; i < message.Longs.Length; i++)
-                {
-                    buffer.Write(message.Longs[i]);
-                }
-            }
-            if (message.Strings != null)
-            {
-                for (int i = 0; i < message.Strings.Length; i++)
-                {
-                    buffer.Write(message.Strings[i]);
-                }
-            }
+                ByteBuffer buffer = new ByteBuffer();
 
-            TCP.SendMessage(buffer.ToArray());
+                buffer.Write(packetID);
 
-            buffer.Dispose();
+                Message message;
+
+                if (messages.TryGetValue(packetID, out message)) { }
+                else { return; }
+
+                if (message.Integers != null)
+                {
+                    for (int i = 0; i < message.Integers.Length; i++)
+                    {
+                        buffer.Write(message.Integers[i]);
+                    }
+                }
+                if (message.Floats != null)
+                {
+                    for (int i = 0; i < message.Floats.Length; i++)
+                    {
+                        buffer.Write(message.Floats[i]);
+                    }
+                }
+                if (message.Shorts != null)
+                {
+                    for (int i = 0; i < message.Shorts.Length; i++)
+                    {
+                        buffer.Write(message.Shorts[i]);
+                    }
+                }
+                if (message.Longs != null)
+                {
+                    for (int i = 0; i < message.Longs.Length; i++)
+                    {
+                        buffer.Write(message.Longs[i]);
+                    }
+                }
+                if (message.Strings != null)
+                {
+                    for (int i = 0; i < message.Strings.Length; i++)
+                    {
+                        buffer.Write(message.Strings[i]);
+                    }
+                }
+
+                TCP.SendMessage(buffer.ToArray());
+
+                buffer.Dispose();
+            }
+            catch (Exception reason)
+            {
+                throw new Exception($"Failed to send message, reason: {reason}");
+            }
         }
 
         public void DisconnectFromServer()
         {
-            TCP.DisconnectFromServer();
+            try
+            {
+                TCP.DisconnectFromServer();
+            }
+            catch (Exception reason)
+            {
+                throw new Exception($"Failed to disconnect from server, reason: {reason}");
+            }
         }
 
         void ConsoleThread() { while (true) { } }
@@ -133,12 +168,16 @@ namespace SyncedNetwork.Client
         public ClientTCP(ClientHandle handle)
         {
             this.handle = handle;
+            this.onConnectToServerSuccess = null;
+            this.onConnectToServerFailed = null;
+            this.onDisconnectedFromServer = null;
         }
         public ClientTCP(ClientHandle handle, Client.ConnectedToServerCallback onConnectToServerSuccess, Client.ConnectedToServerCallback onConnectToServerFailed)
         {
             this.handle = handle;
             this.onConnectToServerSuccess = onConnectToServerSuccess;
             this.onConnectToServerFailed = onConnectToServerFailed;
+            this.onDisconnectedFromServer = null;
         }
         public ClientTCP(ClientHandle handle, Client.ConnectedToServerCallback onConnectToServerSuccess, Client.ConnectedToServerCallback onConnectToServerFailed, Client.DisconnectedFromServerCallback onDisconnectedFromServer)
         {

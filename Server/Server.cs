@@ -14,90 +14,141 @@ namespace SyncedNetwork.Server
         ServerTCP TCP;
 
         Dictionary<int, Message> messages;
-        RecieveMessageCallback onRecieveMessage;
+
         public delegate void RecieveMessageCallback(int clientID, int packetID, Message message);
+        public delegate void OnClientConnect(int clientID);
+        public delegate void OnClientDisconnect(int clientID);
 
-        public void StartServer(int port)
+        public void StartServer(int port, int maxPlayers, Dictionary<int, Message> messages, RecieveMessageCallback onRecieveMessage)
         {
-            threadConsole = new Thread(new ThreadStart(ConsoleThread));
-            threadConsole.Start();
-
-            handle = new ServerHandle();
-            
-            handle.SetMessages(messages, onRecieveMessage);
-
-            TCP = new ServerTCP();
-
-            for (int i = 0; i < ServerTCP.maxPlayers; i++)
+            try
             {
-                TCP.clients[i] = new ServerClient(handle);
+                this.messages = messages;
+
+                threadConsole = new Thread(new ThreadStart(ConsoleThread));
+                threadConsole.Start();
+
+                TCP = new ServerTCP(port, maxPlayers);
+                handle = new ServerHandle(TCP, messages, onRecieveMessage);
+
+                for (int i = 0; i < TCP.maxPlayers; i++)
+                {
+                    TCP.clients[i] = new ServerClient(handle);
+                }
+
+                TCP.StartServer();
             }
-
-            handle.SetTCP(TCP);
-
-            TCP.StartServer(port);
+            catch (Exception reason)
+            {
+                throw new Exception($"Failed to start server, reason: {reason}");
+            }
         }
-
-        public void SetMessages(Dictionary<int, Message> messages)
+        public void StartServer(int port, int maxPlayers, Dictionary<int, Message> messages, RecieveMessageCallback onRecieveMessage, OnClientConnect onClientConnect)
         {
-            this.messages = messages;
+            try
+            {
+                this.messages = messages;
+
+                threadConsole = new Thread(new ThreadStart(ConsoleThread));
+                threadConsole.Start();
+
+                TCP = new ServerTCP(port, maxPlayers, onClientConnect);
+                handle = new ServerHandle(TCP, messages, onRecieveMessage);
+
+                for (int i = 0; i < TCP.maxPlayers; i++)
+                {
+                    TCP.clients[i] = new ServerClient(handle);
+                }
+
+                TCP.StartServer();
+            }
+            catch (Exception reason)
+            {
+                throw new Exception($"Failed to start server, reason: {reason}");
+            }
+        }
+        public void StartServer(int port, int maxPlayers, Dictionary<int, Message> messages, RecieveMessageCallback onRecieveMessage, OnClientConnect onClientConnect, OnClientDisconnect onClientDisconnect)
+        {
+            try
+            {
+                this.messages = messages;
+
+                threadConsole = new Thread(new ThreadStart(ConsoleThread));
+                threadConsole.Start();
+
+                TCP = new ServerTCP(port, maxPlayers, onClientConnect);
+                handle = new ServerHandle(TCP, messages, onRecieveMessage);
+
+                for (int i = 0; i < TCP.maxPlayers; i++)
+                {
+                    TCP.clients[i] = new ServerClient(handle, onClientDisconnect);
+                }
+
+                TCP.StartServer();
+            }
+            catch (Exception reason)
+            {
+                throw new Exception($"Failed to start server, reason: {reason}");
+            }
         }
 
         public void SendMessage(int clientID, int packetID)
         {
-            ByteBuffer buffer = new ByteBuffer();
-
-            buffer.Write(packetID);
-
-            Message message;
-
-            if (messages.TryGetValue(packetID, out message)) { }
-            else { return; }
-
-            if (message.Integers != null)
+            try
             {
-                for (int i = 0; i < message.Integers.Length; i++)
-                {
-                    buffer.Write(message.Integers[i]);
-                }
-            }
-            if (message.Floats != null)
-            {
-                for (int i = 0; i < message.Floats.Length; i++)
-                {
-                    buffer.Write(message.Floats[i]);
-                }
-            }
-            if (message.Shorts != null)
-            {
-                for (int i = 0; i < message.Shorts.Length; i++)
-                {
-                    buffer.Write(message.Shorts[i]);
-                }
-            }
-            if (message.Longs != null)
-            {
-                for (int i = 0; i < message.Longs.Length; i++)
-                {
-                    buffer.Write(message.Longs[i]);
-                }
-            }
-            if (message.Strings != null)
-            {
-                for (int i = 0; i < message.Strings.Length; i++)
-                {
-                    buffer.Write(message.Strings[i]);
-                }
-            }
+                ByteBuffer buffer = new ByteBuffer();
 
-            TCP.SendDataTo(clientID, buffer.ToArray());
+                buffer.Write(packetID);
 
-            buffer.Dispose();
-        }
+                Message message;
 
-        public void OnRecieveMessage(RecieveMessageCallback onRecieveMessage)
-        {
-            this.onRecieveMessage = onRecieveMessage;
+                if (messages.TryGetValue(packetID, out message)) { }
+                else { return; }
+
+                if (message.Integers != null)
+                {
+                    for (int i = 0; i < message.Integers.Length; i++)
+                    {
+                        buffer.Write(message.Integers[i]);
+                    }
+                }
+                if (message.Floats != null)
+                {
+                    for (int i = 0; i < message.Floats.Length; i++)
+                    {
+                        buffer.Write(message.Floats[i]);
+                    }
+                }
+                if (message.Shorts != null)
+                {
+                    for (int i = 0; i < message.Shorts.Length; i++)
+                    {
+                        buffer.Write(message.Shorts[i]);
+                    }
+                }
+                if (message.Longs != null)
+                {
+                    for (int i = 0; i < message.Longs.Length; i++)
+                    {
+                        buffer.Write(message.Longs[i]);
+                    }
+                }
+                if (message.Strings != null)
+                {
+                    for (int i = 0; i < message.Strings.Length; i++)
+                    {
+                        buffer.Write(message.Strings[i]);
+                    }
+                }
+
+                TCP.SendDataTo(clientID, buffer.ToArray());
+
+                buffer.Dispose();
+            }
+            catch (Exception reason)
+            {
+                throw new Exception($"Failed to send message, reason: {reason}");
+            }
         }
 
         void ConsoleThread() { while (true) { } }
@@ -105,29 +156,42 @@ namespace SyncedNetwork.Server
 
     public class ServerTCP
     {
-        public const int maxPlayers = 2;
-        public ServerClient[] clients = new ServerClient[maxPlayers];
-        
+        public int maxPlayers;
+        public ServerClient[] clients;
+
+        Server.OnClientConnect onClientConnect;
+
+        int port;
         TcpListener serverSocket;
 
-        public void StartServer(int port)
+        public ServerTCP(int port, int maxPlayers)
         {
-            serverSocket = new TcpListener(IPAddress.Any, port);
-            
-            //serverSocket.Server.NoDelay = true;
-            
+            this.port = port;
+
+            this.maxPlayers = maxPlayers;
+            this.clients = new ServerClient[this.maxPlayers];
+        }
+        public ServerTCP(int port, int maxPlayers, Server.OnClientConnect onClientConnect)
+        {
+            this.port = port;
+
+            this.maxPlayers = maxPlayers;
+            this.clients = new ServerClient[this.maxPlayers];
+
+            this.onClientConnect = onClientConnect;
+        }
+
+        public void StartServer()
+        {
+            serverSocket = new TcpListener(IPAddress.Any, port);            
             serverSocket.Start();
 
             serverSocket.BeginAcceptTcpClient(OnClientConnect, null);
         }
 
-        #region "MAKE SURE TO ADD CALLBACKS TO SERVER SCRIPT AND CLIENT SCRIPT"
-
         void OnClientConnect(IAsyncResult result)
         {
             TcpClient client = serverSocket.EndAcceptTcpClient(result);
-
-            Console.WriteLine("Connection recieved from {0}", client.Client.RemoteEndPoint.ToString());
 
             serverSocket.BeginAcceptTcpClient(OnClientConnect, null);
 
@@ -141,17 +205,17 @@ namespace SyncedNetwork.Server
                     
                     clients[i].InitializeClient();
 
-                    Console.WriteLine("Connection accepted from {0}", client.Client.RemoteEndPoint.ToString());
+                    if (onClientConnect != null) { onClientConnect(clients[i].ID); }
 
                     return;
                 }
             }
         }
 
-        #endregion
-
         public void SendDataTo(int clientID, byte[] data)
         {
+            if (clients[clientID].stream == null) { return; }
+
             ByteBuffer buffer = new ByteBuffer();
 
             buffer.Write((data.GetUpperBound(0) - data.GetLowerBound(0)) + 1);
@@ -163,19 +227,15 @@ namespace SyncedNetwork.Server
 
     public class ServerHandle
     {
-        ServerTCP tcp;
+        ServerTCP TCP;
 
         int packetLength;
         Dictionary<int, Message> messages;
         Server.RecieveMessageCallback onRecieveMessage;
 
-        public void SetTCP(ServerTCP tcp)
+        public ServerHandle(ServerTCP TCP, Dictionary<int, Message> messages, Server.RecieveMessageCallback onRecieveMessage)
         {
-            this.tcp = tcp;
-        }
-
-        public void SetMessages(Dictionary<int, Message> messages, Server.RecieveMessageCallback onRecieveMessage)
-        {
+            this.TCP = TCP;
             this.messages = messages;
             this.onRecieveMessage = onRecieveMessage;
         }
@@ -187,9 +247,9 @@ namespace SyncedNetwork.Server
 
             ByteBuffer clientBuffer;
 
-            if (tcp.clients[clientID].buffer == null) { tcp.clients[clientID].buffer = new ByteBuffer(); }
+            if (TCP.clients[clientID].buffer == null) { TCP.clients[clientID].buffer = new ByteBuffer(); }
 
-            clientBuffer = tcp.clients[clientID].buffer;
+            clientBuffer = TCP.clients[clientID].buffer;
 
             clientBuffer.Write(buffer);
 
@@ -219,7 +279,7 @@ namespace SyncedNetwork.Server
                     clientBuffer.ReadInt();
                     data = clientBuffer.ReadBytes(packetLength);
 
-                    HandleDataPackets(clientID, data);
+                    HandleMessages(clientID, data);
                 }
 
                 packetLength = 0;
@@ -238,7 +298,7 @@ namespace SyncedNetwork.Server
             }
         }
 
-        void HandleDataPackets(int clientID, byte[] data)
+        void HandleMessages(int clientID, byte[] data)
         {
             int packetID;
             Message message;

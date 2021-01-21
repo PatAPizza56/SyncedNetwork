@@ -11,14 +11,21 @@ namespace SyncedNetwork.Server
         public NetworkStream stream;
         public ByteBuffer buffer;
 
+        ServerHandle handle;
+        Server.OnClientDisconnect onClientDisconnect;
+
         int bufferSize = 4096;
         byte[] readBuffer;
-
-        public ServerHandle handle;
 
         public ServerClient(ServerHandle handle)
         {
             this.handle = handle;
+            this.onClientDisconnect = null;
+        }
+        public ServerClient(ServerHandle handle, Server.OnClientDisconnect onClientDisconnect)
+        {
+            this.handle = handle;
+            this.onClientDisconnect = onClientDisconnect;
         }
 
         public void InitializeClient()
@@ -40,7 +47,7 @@ namespace SyncedNetwork.Server
 
                 if (bytesLength <= 0)
                 {
-                    CloseSocket();
+                    Disconnect();
 
                     return;
                 }
@@ -49,23 +56,27 @@ namespace SyncedNetwork.Server
 
                 Buffer.BlockCopy(readBuffer, 0, data, 0, bytesLength);
 
-                //FIX LATER
                 handle.HandleData(ID, data);
 
                 stream.BeginRead(readBuffer, 0, bufferSize, OnRecieveData, null);
             }
             catch
             {
-                CloseSocket();
+                Disconnect();
             }
         }
 
-        void CloseSocket()
+        void Disconnect()
         {
-            Console.WriteLine("Connection from {0} has been terminated", IP);
+            if (onClientDisconnect != null) { onClientDisconnect(ID); }
 
             socket.Close();
             socket = null;
+
+            stream = null;
+            buffer = null;
+
+            onClientDisconnect = null;
         }
     }
 }
