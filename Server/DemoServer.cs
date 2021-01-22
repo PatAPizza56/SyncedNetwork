@@ -9,7 +9,7 @@ class DemoServer
     static Dictionary<int, Message> messages = new Dictionary<int, Message>();
 
     // Constant variables for starting the Server
-    static int Port = 10707;
+    static int Port = 50707;
     static int MaxPlayers = 2;
 
     public static void Main(string[] args)

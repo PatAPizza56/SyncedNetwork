@@ -10,7 +10,7 @@ class DemoClient
 
     // Constant variables for starting the Server
     static string IP = "127.0.0.1";
-    static int Port = 10707;
+    static int Port = 50707;
 
     public static void Main(string[] args)
     {
