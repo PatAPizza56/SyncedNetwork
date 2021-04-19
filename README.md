@@ -21,4 +21,4 @@ Important note: Be sure that the messages dictionary is identical on the client 
 
 Created on: `1/17/21`  
 Skills learned: C# networking using TCP  
-Project difficulty: 7/10
+Project difficulty: 8
